@@ -10,21 +10,18 @@ import Dashboard from "../Dashboard/Dashboard";
 
 class App extends Component {
   render() {
+
+    const authentication = localStorage.getItem('dataUser');
+
     return (
       <Provider store={store}>
         <div>
           <NavbarComponent />
           {/* <JumbotronComponent /> */}
           <Router>
-            <Route path="/" exact >
-              <Dashboard/>  
-            </Route>
-            <Route path="/login" exact>
-              <Login />
-            </Route>
-            <Route path="/register" exact>
-              <Register />
-            </Route>
+            <Route path="/login" exact component={Login}/>
+            <Route path="/dashboard" component={Dashboard}/>
+            <Route path="/register" component={Register}/>
           </Router>
         </div>
       </Provider>

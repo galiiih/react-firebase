@@ -22,14 +22,16 @@ const reduxDispatch = (dispatch) => ({
   deleteProfil: (data) => dispatch(deleteDataAPI(data))
 });
 
+const username = JSON.parse(localStorage.getItem('dataUser')).name || "";
+const email = JSON.parse(localStorage.getItem('dataUser')).email || "";
 class Home extends Component {
   state = {
-    Username: "",
-    Email: "",
+    Username: username,
+    Email: email,
     Password: "",
     NoHp: "",
     NoTelp: "",
-    FotoProfil: "",
+    FotoProfil: null,
     Alamat: "",
     Role: "Customer",
     textBtn: "SIMPAN",
@@ -42,9 +44,15 @@ class Home extends Component {
   }
 
   handleChange = (e, type) => {
-    this.setState({
-      [type]: e.target.value,
-    });
+    if(type == "FotoProfil"){
+      this.setState({
+        FotoProfil: e.target.files[0]
+      })
+    }else{
+      this.setState({
+        [type]: e.target.value,
+      });
+    }
   };
 
   handleSaveProfil = () => {
@@ -76,9 +84,11 @@ class Home extends Component {
 
     if (textBtn === "SIMPAN") {
       saveProfil(data);
+      // this.props.getProfil(dataUser.uid);
     } else {
       data.profilId = profilId;
       updateProfil(data);
+      // this.props.getProfil(dataUser.uid);
     }
 
     console.log(data);
@@ -206,6 +216,7 @@ class Home extends Component {
         {profil.length > 0 ? (
           <Fragment>
             {profil.map((profil) => {
+              console.log(profil,'===')
               return (
                 <div
                   className="card-content"
@@ -225,7 +236,6 @@ class Home extends Component {
                   <p className="content">{profil.data.Role}</p>
                   
                 </div>
-                
               );
             })}
           </Fragment>

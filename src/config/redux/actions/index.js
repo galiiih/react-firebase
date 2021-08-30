@@ -85,15 +85,13 @@ export const getDataFromAPI = (userId) => (dispatch) => {
       // updateStarCount(postElement, data);
       console.log("get Profil:",snapshot.val());
       const data = [];
-      if(data === null) {
-        return null;
+      if(!snapshot.val()) {
+        return [];
       } else {
-        Object.keys(snapshot.val()).map(key => {
-          data.push({
-            id: key,
-            data: snapshot.val()[key]
-          })
-        });
+        data.push({
+          id: 1,
+          data: snapshot.val()
+        })
       }
        //merubah objek ke array
       dispatch({type: "SET_PROFIL", value: data})
