@@ -35,7 +35,7 @@ class Login extends Component {
         email: "",
         password: "",
       });
-      window.location.href = "/";
+      window.location.href = "/dashboard";
     } else {
       console.log("Login Gagal  ");
     }
