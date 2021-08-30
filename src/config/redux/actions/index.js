@@ -86,7 +86,7 @@ export const getDataFromAPI = (userId) => (dispatch) => {
       console.log("get Profil:",snapshot.val());
       const data = [];
       if(data === null) {
-        return null;
+        return undefined;
       } else {
         Object.keys(snapshot.val()).map(key => {
           data.push({

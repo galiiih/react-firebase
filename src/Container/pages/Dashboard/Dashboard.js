@@ -1,4 +1,3 @@
-import { text } from "@fortawesome/fontawesome-svg-core";
 import React, { Component } from "react";
 import { Fragment } from "react";
 import { connect } from "react-redux";
@@ -126,7 +125,7 @@ class Home extends Component {
 
   render() {
     const { profil } = this.props;
-    const { updateProfil, cancelUpdate, deleteProfil } = this;
+    const { updateProfil, cancelUpdate, deleteProfil, handleSaveProfil } = this;
     console.log("profil", profil);
     return (
       <div className="container">
@@ -197,7 +196,7 @@ class Home extends Component {
             ) : (
               <div />
             )}
-            <button className="save-btn" onClick={this.handleSaveProfil}>
+            <button className="save-btn" onClick={handleSaveProfil}>
               {this.state.textBtn}
             </button>
           </div>
@@ -212,9 +211,6 @@ class Home extends Component {
                   key={profil.id}
                   onClick={() => updateProfil(profil)}
                 >
-                  <div className="delete-btn" onClick={(e) => deleteProfil(e, profil)}>
-                    X
-                  </div>
                   <p className="title">{profil.data.Username}</p>
                   <p className="content">{profil.data.Email}</p>
                   <p className="content">{profil.data.Password}</p>
@@ -223,7 +219,9 @@ class Home extends Component {
                   <p className="content">{profil.data.FotoProfil}</p>
                   <p className="content">{profil.data.Alamat}</p>
                   <p className="content">{profil.data.Role}</p>
-                  
+                  <div className="delete-btn" onClick={(e) => deleteProfil(e, profil)}>
+                    X
+                  </div>
                 </div>
                 
               );
