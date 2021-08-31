@@ -33,8 +33,8 @@ class Home extends Component {
     NoHp: "",
     NoTelp: "",
     FotoProfil: "",
-    progress: 0,
-    downloadURL: null,
+    Progress: 0,
+    downloadURL: "",
     Alamat: "",
     Role: "Customer",
     textBtn: "SIMPAN",
@@ -67,6 +67,8 @@ class Home extends Component {
       NoHp,
       NoTelp,
       FotoProfil,
+      Progress,
+      downloadURL,
       Alamat,
       Email,
       Password,
@@ -84,6 +86,8 @@ class Home extends Component {
       NoHp: NoHp,
       NoTelp: NoTelp,
       FotoProfil: FotoProfil,
+      Progress: Progress,
+      downloadURL: downloadURL,
       Alamat: Alamat,
       Role: Role,
       userId: dataUser.uid,
@@ -144,7 +148,7 @@ class Home extends Component {
   };
 
   render() {
-    const { profil } = this.props;
+    const { profil, Progress } = this.props;
     const { updateProfil, cancelUpdate, deleteProfil, handleSaveProfil } = this;
     console.log("profil", profil);
     return (
@@ -220,6 +224,7 @@ class Home extends Component {
               {this.state.textBtn}
             </button>
           </div>
+          {/* <progress value={Progress} max="100"/> */}
         </div>
         <hr />
         {profil.length > 0 ? (
@@ -237,7 +242,8 @@ class Home extends Component {
                   <p className="content">{profil.data.Password}</p>
                   <p className="content">{profil.data.NoHp}</p>
                   <p className="content">{profil.data.NoTelp}</p>
-                  <p className="content">{profil.data.FotoProfil}</p>
+                  {/* <p className="content">{profil.data.downloadURL}</p> */}
+                  <img src={profil.data.downloadURL || "http://via.placeholder.com/150"} alt="profil-image"/>
                   <p className="content">{profil.data.Alamat}</p>
                   <p className="content">{profil.data.Role}</p>
                   <div

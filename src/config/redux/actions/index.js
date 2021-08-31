@@ -140,7 +140,12 @@ export const uploadImageProfile = (data) => (dispatch) => {
   const storageRef = storage.ref();
   const uploadTask = storageRef("profil/" + data.FotoProfil).put(Image);
   uploadTask.on(
-    (snapshot) => {},
+    (snapshot) => {
+      const Progress = Math.round(
+        (snapshot.byteTransferred / snapshot.totalBytes) * 100
+      );
+      data.Progress(Progress);
+    },
     (err) => {
       console.log(err);
     },
@@ -150,7 +155,7 @@ export const uploadImageProfile = (data) => (dispatch) => {
         .child(data.FotoProfil)
         .getDownloadURL()
         .then((url) => {
-          console.log(url);
+          data.downloadURL(url);
         })
   );
 };
