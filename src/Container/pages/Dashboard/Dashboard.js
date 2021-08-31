@@ -6,6 +6,7 @@ import {
   deleteDataAPI,
   getDataFromAPI,
   updateDataAPI,
+  uploadImageProfile,
 } from "../../../config/redux/actions";
 import "./Dashboard.scss";
 
@@ -18,11 +19,12 @@ const reduxDispatch = (dispatch) => ({
   saveProfil: (data) => dispatch(addDataToAPI(data)),
   getProfil: (data) => dispatch(getDataFromAPI(data)),
   updateProfil: (data) => dispatch(updateDataAPI(data)),
-  deleteProfil: (data) => dispatch(deleteDataAPI(data))
+  deleteProfil: (data) => dispatch(deleteDataAPI(data)),
+  uploadImage: (data) => dispatch(uploadImageProfile(data)),
 });
 
-const username = JSON.parse(localStorage.getItem('dataUser')).name || "";
-const email = JSON.parse(localStorage.getItem('dataUser')).email || "";
+const username = JSON.parse(localStorage.getItem("dataUser")).name || "";
+const email = JSON.parse(localStorage.getItem("dataUser")).email || "";
 class Home extends Component {
   state = {
     Username: username,
@@ -30,7 +32,9 @@ class Home extends Component {
     Password: "",
     NoHp: "",
     NoTelp: "",
-    FotoProfil: null,
+    FotoProfil: "",
+    progress: 0,
+    downloadURL: null,
     Alamat: "",
     Role: "Customer",
     textBtn: "SIMPAN",
@@ -43,15 +47,18 @@ class Home extends Component {
   }
 
   handleChange = (e, type) => {
-    if(type == "FotoProfil"){
+    if (type === "FotoProfil") {
       this.setState({
-        FotoProfil: e.target.files[0]
-      })
-    }else{
+        FotoProfil: e.target.files[0],
+      });
+    } else {
       this.setState({
         [type]: e.target.value,
       });
     }
+    // this.setState({
+    //   [type]: e.target.value
+    // })
   };
 
   handleSaveProfil = () => {
@@ -66,7 +73,8 @@ class Home extends Component {
       Role,
       profilId,
     } = this.state;
-    const { saveProfil, textBtn, updateProfil } = this.props;
+    
+    const { saveProfil, textBtn, updateProfil, uploadImage } = this.props;
     const dataUser = JSON.parse(localStorage.getItem("dataUser"));
 
     const data = {
@@ -83,6 +91,8 @@ class Home extends Component {
 
     if (textBtn === "SIMPAN") {
       saveProfil(data);
+      uploadImage(data);
+
       // this.props.getProfil(dataUser.uid);
     } else {
       data.profilId = profilId;
@@ -101,7 +111,7 @@ class Home extends Component {
       Password: profil.data.Password,
       NoHp: profil.data.NoHp,
       NoTelp: profil.data.NoTelp,
-      // FotoProfil: profil.data.FotoProfil,
+      FotoProfil: profil.data.FotoProfil,
       Alamat: profil.data.Alamat,
       textBtn: "UPDATE",
       profilId: profil.id,
@@ -127,8 +137,8 @@ class Home extends Component {
     const dataUser = JSON.parse(localStorage.getItem("dataUser"));
     const data = {
       userId: dataUser.uid,
-      profilId: profil.id
-    }
+      profilId: profil.id,
+    };
     alert("yakin mau hapus?");
     deleteProfil(data);
   };
@@ -214,8 +224,8 @@ class Home extends Component {
         <hr />
         {profil.length > 0 ? (
           <Fragment>
-            {profil.map((profil) => {
-              console.log(profil,'===')
+            {profil.map(profil => {
+              // console.log(profil,'===')
               return (
                 <div
                   className="card-content"
@@ -230,7 +240,10 @@ class Home extends Component {
                   <p className="content">{profil.data.FotoProfil}</p>
                   <p className="content">{profil.data.Alamat}</p>
                   <p className="content">{profil.data.Role}</p>
-                  <div className="delete-btn" onClick={(e) => deleteProfil(e, profil)}>
+                  <div
+                    className="delete-btn"
+                    onClick={(e) => deleteProfil(e, profil)}
+                  >
                     X
                   </div>
                 </div>

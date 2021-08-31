@@ -2,6 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/firebase-analytics'
 import 'firebase/firebase-auth'
+import 'firebase/storage'
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
@@ -25,5 +26,6 @@ const firebaseConfig = {
   firebase.analytics();
 
   export const database = firebase.database();
+  export const storage = firebase.storage();
 
   export default firebase;

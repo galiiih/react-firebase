@@ -38,6 +38,16 @@ const NavbarComponent = (props) => {
                 <NavLink href="/register">Register</NavLink>
               </NavItem>
             </Nav>
+            <Nav className="mr-auto" navbar>
+              <NavItem>
+                <NavLink href="/kelolaproduk">Kelola Produk</NavLink>
+              </NavItem>
+            </Nav>
+            <Nav className="mr-auto" navbar>
+              <NavItem>
+                <NavLink href="/dashboard">Dashboard</NavLink>
+              </NavItem>
+            </Nav>
             <NavbarText>Profil</NavbarText>
           </Collapse>
         </Container>

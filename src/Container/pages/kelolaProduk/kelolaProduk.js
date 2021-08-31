@@ -1,7 +1,120 @@
 import React, { Component } from "react";
+import "./kelolaProduk.scss";
 
 class kelolaProduk extends Component {
+  state = {
+    NamaProduk: "",
+    Katalog: ["Cetak", "Kategori", "Promo", "Sewa"],
+    Kategori: [
+      "Birthday",
+      "Family",
+      "Filming",
+      "Graduation",
+      "Nature",
+      "Wedding",
+      "Travel",
+      "Pas Foto",
+    ],
+    Deskripsi: "",
+    Inkluisi: "",
+    Harga: "",
+    FotoProduk: null,
+    donwloadURL: null,
+    textBtn: "SIMPAN",
+    profilId: "",
+  };
+
+  handleChange = (e, type) => {
+    if (type === "FotoProduk") {
+      this.setState({
+        FotoProduk: e.target.files[0],
+      });
+    } else {
+      this.setState({
+        [type]: e.target.value,
+      });
+    }
+  };
+
+  handleSaveProduk = () => {
+    const {
+      NamaProduk,
+      Katalog,
+      Kategori,
+      Deskripsi,
+      Inkluisi,
+      Harga,
+      FotoProduk,
+      // profilId,
+    } = this.state;
+
+    const { textBtn } = this.state;
+    // const dataUser = JSON.parse(localStorage.getItem("dataUser"));
+
+    const data = {
+      NamaProduk: NamaProduk,
+      Katalog: Katalog,
+      Kategori: Kategori,
+      Deskripsi: Deskripsi,
+      Inkluisi: Inkluisi,
+      Harga: Harga,
+      FotoProduk: FotoProduk,
+      // produkId: produkId,
+    };
+
+    if (textBtn === "SIMPAN") {
+      // saveProduk(data);
+      // this.props.getProfil(dataUser.uid);
+    } else {
+      // data.produkId = produkId;
+      // updateProduk(data);
+      // this.props.getProfil(dataUser.uid);
+    }
+
+    console.log(data);
+  };
+
+  updateProduk = (produk) => {
+    console.log(produk);
+    this.setState({
+      NamaProduk: produk.data.NamaProduk,
+      Katalog: produk.data.Katalog,
+      Kategori: produk.data.Kategori,
+      Deskripsi: produk.data.Deskripsi,
+      Inkluisi: produk.data.Inkluisi,
+      Harga: produk.data.Harga,
+      // FotoProduk: produk.data.FotoProduk,
+      textBtn: "UPDATE",
+      produkId: produk.id,
+    });
+  };
+
+  cancelUpdate = (produk) => {
+    this.setState({
+      Username: "",
+      Email: "",
+      Password: "",
+      NoHp: "",
+      NoTelp: "",
+      FotoProfil: "",
+      Alamat: "",
+      textBtn: "SIMPAN",
+    });
+  };
+
+  deleteProduk = (e, produk) => {
+    e.stopPropagation(); //fungsi untuk stop function dari parent, hanya function dari childnya saja
+    const { deleteProduk } = this.props;
+    const dataUser = JSON.parse(localStorage.getItem("dataUser"));
+    const data = {
+      userId: dataUser.uid,
+      produkId: produk.id,
+    };
+    alert("yakin mau hapus?");
+    deleteProduk(data);
+  };
   render() {
+    const { cancelUpdate } = this;
     return (
       <div className="container">
         <div className="input-form">
@@ -52,7 +165,7 @@ class kelolaProduk extends Component {
             // onChange={(e) => this.handleChange(e, "FotoProfil")}
           />
           <div className="d-flex justify-content-center align-items-center">
-            <img src={image} className="img-thumbnail" alt="" />
+            <img src="" className="img-thumbnail" alt="" />
           </div>
           <input
             id="FotoProduk"
@@ -71,11 +184,28 @@ class kelolaProduk extends Component {
             ) : (
               <div />
             )}
-            <button className="save-btn" onClick={handleSaveProfil}>
+            <button className="save-btn" onClick={this.handleSaveProduk}>
               {this.state.textBtn}
             </button>
           </div>
         </div>
+        <hr />
+        {/* <div
+          className="card-content"
+          // key={profil.id}
+          // onClick={() => updateProfil(profil)}
+        >
+          <p className="title">{produk.data.NamaProduk}</p>
+          <p className="content">{produk.data.Email}</p>
+          <p className="content">{produk.data.Password}</p>
+          <p className="content">{produk.data.NoHp}</p>
+          <p className="content">{produk.data.NoTelp}</p>
+          <p className="content">{produk.data.Fotoproduk}</p>
+          <p className="content">{produk.data.Role}</p>
+          <div className="delete-btn" onClick={(e) => deleteproduk(e, produk)}>
+            X
+          </div>
+        </div> */}
       </div>
     );
   }
