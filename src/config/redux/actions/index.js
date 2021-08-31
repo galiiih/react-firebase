@@ -42,7 +42,6 @@ export const loginUserAPI = (data) => (dispatch) => {
         // Signed in
         var user = userCredential.user;
         const dataUser = {
-          name: user.displayName,
           email: user.email,
           uid: user.uid,
           refreshToken: user.refreshToken,

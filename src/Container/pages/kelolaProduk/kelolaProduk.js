@@ -1,5 +1,43 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import {
+  addProdukKategori,
+  addProdukPromo,
+  addProdukSewa,
+  getDataKategoriFromAPI,
+  getDataPromoFromAPI,
+  getDataSewaFromAPI,
+  updateDataKategoriAPI,
+  updateDataPromoAPI,
+  updateDataSewaAPI,
+  deleteDataKategoriAPI,
+  deleteDataPromoAPI,
+  deleteDataSewaAPI,
+  uploadImageProduk,
+  
+} from "../../../config/redux/actions/kelolaProdukAction";
 import "./kelolaProduk.scss";
+
+const reduxState = (state) => ({
+  dataUser: state.user,
+  produk: state.produk,
+});
+
+const reduxDispatch = (dispatch) => ({
+  saveKategori: (data) => dispatch(addProdukKategori(data)),
+  savePromo: (data) => dispatch(addProdukPromo(data)),
+  saveSewa: (data) => dispatch(addProdukSewa(data)),
+  getKategori: (data) => dispatch(getDataKategoriFromAPI(data)),
+  getPromo: (data) => dispatch(getDataPromoFromAPI(data)),
+  getSewa: (data) => dispatch(getDataSewaFromAPI(data)),
+  updateKategori: (data) => dispatch(updateDataKategoriAPI(data)),
+  updatePromo: (data) => dispatch(updateDataPromoAPI(data)),
+  updateSewa: (data) => dispatch(updateDataSewaAPI(data)),
+  deleteDataKategori: (data) => dispatch(deleteDataKategoriAPI(data)),
+  deleteDataPromo: (data) => dispatch(deleteDataPromoAPI(data)),
+  deleteDataSewa: (data) => dispatch(deleteDataSewaAPI(data)),
+  uploadImage: (data) => dispatch(uploadImageProduk(data)),
+});
 
 class kelolaProduk extends Component {
   state = {
@@ -83,7 +121,7 @@ class kelolaProduk extends Component {
       Deskripsi: produk.data.Deskripsi,
       Inkluisi: produk.data.Inkluisi,
       Harga: produk.data.Harga,
-      // FotoProduk: produk.data.FotoProduk,
+      FotoProduk: produk.data.FotoProduk,
       textBtn: "UPDATE",
       produkId: produk.id,
     });
@@ -91,13 +129,13 @@ class kelolaProduk extends Component {
 
   cancelUpdate = (produk) => {
     this.setState({
-      Username: "",
-      Email: "",
-      Password: "",
-      NoHp: "",
-      NoTelp: "",
-      FotoProfil: "",
-      Alamat: "",
+      NamaProduk: "",
+      Katalog: "",
+      Kategori: "",
+      Deskripsi: "",
+      Inkluisi: "",
+      FotoProduk: "",
+      Harga: "",
       textBtn: "SIMPAN",
     });
   };
@@ -211,4 +249,4 @@ class kelolaProduk extends Component {
   }
 }
 
-export default kelolaProduk;
+export default connect(reduxState, reduxDispatch)(kelolaProduk);

@@ -3,7 +3,8 @@ const initialState = {
   isLogin: false,
   isLoading: false,
   user: {},
-  profil: []
+  profil: [],
+  produk: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -35,6 +36,12 @@ const reducer = (state = initialState, action) => {
     return {
       ...state,
       profil: action.value,
+    };
+  }
+  if (action.type === "SET_PRODUK") {
+    return {
+      ...state,
+      produk: action.value,
     };
   }
   return state;

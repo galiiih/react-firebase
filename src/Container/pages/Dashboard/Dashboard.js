@@ -23,11 +23,10 @@ const reduxDispatch = (dispatch) => ({
   uploadImage: (data) => dispatch(uploadImageProfile(data)),
 });
 
-const username = JSON.parse(localStorage.getItem("dataUser")).name || "";
 const email = JSON.parse(localStorage.getItem("dataUser")).email || "";
 class Home extends Component {
   state = {
-    Username: username,
+    Username: "",
     Email: email,
     Password: "",
     NoHp: "",
