@@ -6,7 +6,6 @@ import {
   deleteDataAPI,
   getDataFromAPI,
   updateDataAPI,
-  uploadImageProfile,
 } from "../../../config/redux/actions";
 import "./Dashboard.scss";
 
@@ -68,10 +67,10 @@ class Home extends Component {
       Password,
       Role,
       profilId,
-      textBtn
+      textBtn,
     } = this.state;
     
-    const { saveProfil, updateProfil, uploadImage, downloadURL } = this.props;
+    const { saveProfil, updateProfil, downloadURL } = this.props;
     const dataUser = JSON.parse(localStorage.getItem("dataUser"));
 
     const data = {
@@ -156,7 +155,7 @@ class Home extends Component {
   };
 
   render() {
-    const { profil, Progress, downloadURL } = this.props;
+    const { profil, Progress } = this.props;
     const { updateProfil, cancelUpdate, deleteProfil, handleSaveProfil } = this;
     console.log("profil", profil);
     console.log(this.state,'ini state')
@@ -252,7 +251,7 @@ class Home extends Component {
                   <p className="content">{profil.data.NoHp}</p>
                   <p className="content">{profil.data.NoTelp}</p>
                   {/* <p className="content">{profil.data.downloadURL}</p> */}
-                  <p>{profil.data.downloadURL}</p>
+                  {/* <p>{profil.data.downloadURL}</p> */}
                   <img src={profil.data.downloadURL || "http://via.placeholder.com/150"} width="150px" height="150px" alt="profil-image"/>
                   <p className="content">{profil.data.Alamat}</p>
                   <p className="content">{profil.data.Role}</p>

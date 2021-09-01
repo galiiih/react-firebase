@@ -1,5 +1,6 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
+
 import {
   addProdukKategori,
   addProdukPromo,
@@ -13,14 +14,13 @@ import {
   deleteDataKategoriAPI,
   deleteDataPromoAPI,
   deleteDataSewaAPI,
-  uploadImageProduk,
-  
 } from "../../../config/redux/actions/kelolaProdukAction";
 import "./kelolaProduk.scss";
 
 const reduxState = (state) => ({
   dataUser: state.user,
   produk: state.produk,
+  downloadURL: state.downloadURL,
 });
 
 const reduxDispatch = (dispatch) => ({
@@ -36,7 +36,6 @@ const reduxDispatch = (dispatch) => ({
   deleteDataKategori: (data) => dispatch(deleteDataKategoriAPI(data)),
   deleteDataPromo: (data) => dispatch(deleteDataPromoAPI(data)),
   deleteDataSewa: (data) => dispatch(deleteDataSewaAPI(data)),
-  uploadImage: (data) => dispatch(uploadImageProduk(data)),
 });
 
 class kelolaProduk extends Component {
@@ -56,16 +55,20 @@ class kelolaProduk extends Component {
     Deskripsi: "",
     Inkluisi: "",
     Harga: "",
-    FotoProduk: null,
-    donwloadURL: null,
+    FotoProduk: "",
     textBtn: "SIMPAN",
-    profilId: "",
+    produkId: "",
   };
+
+  componentDidMount() {
+    const dataUser = JSON.parse(localStorage.getItem("dataUser"));
+    // this.props.getProfil(dataUser.uid);
+  }
 
   handleChange = (e, type) => {
     if (type === "FotoProduk") {
       this.setState({
-        FotoProduk: e.target.files[0],
+        FotoProfil: e.target.files[0],
       });
     } else {
       this.setState({
@@ -83,11 +86,25 @@ class kelolaProduk extends Component {
       Inkluisi,
       Harga,
       FotoProduk,
-      // profilId,
+      produkId,
+      textBtn,
     } = this.state;
 
-    const { textBtn } = this.state;
-    // const dataUser = JSON.parse(localStorage.getItem("dataUser"));
+    const {
+      saveKategori,
+      savePromo,
+      saveSewa,
+      getKategori,
+      getPromo,
+      getSewa,
+      updateKategori,
+      updatePromo,
+      updateSewa,
+      deleteDataKategori,
+      deleteDataPromo,
+      deleteDataSewa,
+    } = this.props;
+    const dataUser = JSON.parse(localStorage.getItem("dataUser"));
 
     const data = {
       NamaProduk: NamaProduk,
@@ -97,22 +114,109 @@ class kelolaProduk extends Component {
       Inkluisi: Inkluisi,
       Harga: Harga,
       FotoProduk: FotoProduk,
-      // produkId: produkId,
+      userId: dataUser.uid,
     };
 
     if (textBtn === "SIMPAN") {
-      // saveProduk(data);
-      // this.props.getProfil(dataUser.uid);
+      if (
+        (Kategori === "Birthday",
+        "Family",
+        "Filming",
+        "Graduation",
+        "Nature",
+        "Wedding",
+        "Travel",
+        "Pas Foto")
+      ) {
+        console.log("simpen");
+        const nData = {
+          ...data,
+          downloadURL: this.props.downloadURL,
+        };
+        saveKategori(nData);
+      } else if (Katalog === "Promo") {
+        console.log("simpen");
+        const nData = {
+          ...data,
+          downloadURL: this.props.downloadURL,
+        };
+        savePromo(nData);
+      } else if (Katalog === "Sewa") {
+        console.log("simpen");
+        const nData = {
+          ...data,
+          downloadURL: this.props.downloadURL,
+        };
+        saveSewa(nData);
+      }
     } else {
-      // data.produkId = produkId;
-      // updateProduk(data);
-      // this.props.getProfil(dataUser.uid);
+      if (
+        (Kategori === "Birthday",
+        "Family",
+        "Filming",
+        "Graduation",
+        "Nature",
+        "Wedding",
+        "Travel",
+        "Pas Foto")
+      ) {
+        console.log("update");
+        data.produkId = produkId;
+        const nData = {
+          ...data,
+          downloadURL: this.props.downloadURL,
+        };
+        updateKategori(nData);
+      } else if (Katalog === "Promo") {
+        console.log("update");
+        data.produkId = produkId;
+        const nData = {
+          ...data,
+          downloadURL: this.props.downloadURL,
+        };
+        updatePromo(nData);
+      } else if (Katalog === "Sewa") {
+        console.log("update");
+        data.produkId = produkId;
+        const nData = {
+          ...data,
+          downloadURL: this.props.downloadURL,
+        };
+        updateSewa(nData);
+      }
     }
-
     console.log(data);
   };
 
-  updateProduk = (produk) => {
+  updateKategori = (produk) => {
+    console.log(produk);
+    this.setState({
+      NamaProduk: produk.data.NamaProduk,
+      Katalog: produk.data.Katalog,
+      Kategori: produk.data.Kategori,
+      Deskripsi: produk.data.Deskripsi,
+      Inkluisi: produk.data.Inkluisi,
+      Harga: produk.data.Harga,
+      FotoProduk: produk.data.FotoProduk,
+      textBtn: "UPDATE",
+      produkId: produk.id,
+    });
+  };
+  updatePromo = (produk) => {
+    console.log(produk);
+    this.setState({
+      NamaProduk: produk.data.NamaProduk,
+      Katalog: produk.data.Katalog,
+      Kategori: produk.data.Kategori,
+      Deskripsi: produk.data.Deskripsi,
+      Inkluisi: produk.data.Inkluisi,
+      Harga: produk.data.Harga,
+      FotoProduk: produk.data.FotoProduk,
+      textBtn: "UPDATE",
+      produkId: produk.id,
+    });
+  };
+  updateSewa = (produk) => {
     console.log(produk);
     this.setState({
       NamaProduk: produk.data.NamaProduk,
@@ -152,6 +256,7 @@ class kelolaProduk extends Component {
     deleteProduk(data);
   };
   render() {
+    const {produk} = this.props;
     const { cancelUpdate } = this;
     return (
       <div className="container">
@@ -160,17 +265,17 @@ class kelolaProduk extends Component {
             id="namaProduk"
             placeholder="masukan nama produk"
             className="input-title"
-            // value={this.state.Username}
-            // onChange={(e) => this.handleChange(e, "Username")}
+            value={this.state.NamaProduk}
+            onChange={(e) => this.handleChange(e, "NamaProduk")}
           />
-          <select className="form-select" id="katalog">
+          <select className="form-select" id="katalog" value={this.state.Katalog} onChange={(e) => this.handleChange(e, "Katalog")}>
             <option selected>Pilih katalog</option>
             <option value="1">Cetak</option>
             <option value="2">Kategori</option>
             <option value="3">Promo</option>
             <option value="4">Sewa</option>
           </select>
-          <select className="form-select" id="kategori">
+          <select className="form-select" id="kategori" value={this.state.Kategori} onChange={(e) => this.handleChange(e, "Kategori")}>
             <option selected>Pilih Kategori</option>
             <option value="1">Birthday</option>
             <option value="2">Family</option>
@@ -185,34 +290,34 @@ class kelolaProduk extends Component {
             id="deskripsi"
             placeholder="Masukan Deskripsi"
             className="input-content"
-            // value={this.state.Alamat}
-            // onChange={(e) => this.handleChange(e, "Alamat")}
+            value={this.state.Deskripsi}
+            onChange={(e) => this.handleChange(e, "Deskripsi")}
           />
           <textarea
             id="inklusi"
             placeholder="Masukan Inklusi"
             className="input-content"
-            // value={this.state.Alamat}
-            // onChange={(e) => this.handleChange(e, "Alamat")}
+            value={this.state.Inkluisi}
+            onChange={(e) => this.handleChange(e, "Inkluisi")}
           />
           <input
             id="harga"
             placeholder="Masukan Harga"
             className="input-title"
-            // value={this.state.FotoProfil}
-            // onChange={(e) => this.handleChange(e, "FotoProfil")}
+            value={this.state.Harga}
+            onChange={(e) => this.handleChange(e, "Harga")}
           />
-          <div className="d-flex justify-content-center align-items-center">
+          {/* <div className="d-flex justify-content-center align-items-center">
             <img src="" className="img-thumbnail" alt="" />
-          </div>
+          </div> */}
           <input
             id="FotoProduk"
             placeholder="input Foto Produk"
             className="input-title"
             type="file"
             accept="image/*"
-            // value={this.state.FotoProfil}
-            // onChange={(e) => this.handleChange(e, "FotoProfil")}
+            value={this.state.FotoProduk}
+            onChange={(e) => this.handleChange(e, "FotoProduk")}
           />
           <div className="action-wrapper">
             {this.state.textBtn === "UPDATE" ? (
@@ -228,22 +333,35 @@ class kelolaProduk extends Component {
           </div>
         </div>
         <hr />
-        {/* <div
-          className="card-content"
-          // key={profil.id}
-          // onClick={() => updateProfil(profil)}
-        >
-          <p className="title">{produk.data.NamaProduk}</p>
-          <p className="content">{produk.data.Email}</p>
-          <p className="content">{produk.data.Password}</p>
-          <p className="content">{produk.data.NoHp}</p>
-          <p className="content">{produk.data.NoTelp}</p>
-          <p className="content">{produk.data.Fotoproduk}</p>
-          <p className="content">{produk.data.Role}</p>
-          <div className="delete-btn" onClick={(e) => deleteproduk(e, produk)}>
-            X
-          </div>
-        </div> */}
+        {produk.length > 0 ? (
+          <Fragment>
+            {produk.map(produk => {
+              console.log(produk.data.downloadURL,'===')
+              return (
+                <div
+                  className="card-content"
+                  key={produk.id}
+                  onClick={() => this.updateKategori(produk)}
+                >
+                  <p className="title">{produk.data.NamaProduk}</p>
+                  <p className="content">{produk.data.Katalog}</p>
+                  <p className="content">{produk.data.Kategori}</p>
+                  <p className="content">{produk.data.Deskripsi}</p>
+                  <p className="content">{produk.data.Inkluisi}</p>
+                  <p className="content">{produk.data.Harga}</p>
+                  {/* <p>{profil.data.downloadURL}</p> */}
+                  <img src={produk.data.downloadURL || "http://via.placeholder.com/150"} width="150px" height="150px" alt="profil-image"/>
+                  <div
+                    className="delete-btn"
+                    onClick={(e) => this.deleteProduk(e, produk)}
+                  >
+                    X
+                  </div>
+                </div>
+              );
+            })}
+          </Fragment>
+        ) : null}
       </div>
     );
   }

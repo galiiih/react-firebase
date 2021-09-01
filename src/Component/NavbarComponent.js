@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import firebase from "./../config/firebase/firebase";
 import {
   Collapse,
   Navbar,
@@ -10,6 +11,23 @@ import {
   NavbarText,
   Container,
 } from "reactstrap";
+
+const handleLogout = (e) => {
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      // Sign-out successful.
+      localStorage.removeItem("dataUser");
+      alert("anda telah keluar");
+    })
+    .catch((error) => {
+      // An error happened.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+    });
+};
 
 const NavbarComponent = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,6 +64,11 @@ const NavbarComponent = (props) => {
             <Nav className="mr-auto" navbar>
               <NavItem>
                 <NavLink href="/dashboard">Dashboard</NavLink>
+              </NavItem>
+            </Nav>
+            <Nav className="mr-auto" navbar>
+              <NavItem>
+                <NavLink href="/login" onClick={handleLogout}>Logout</NavLink>
               </NavItem>
             </Nav>
             <NavbarText>Profil</NavbarText>

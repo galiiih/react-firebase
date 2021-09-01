@@ -1,59 +1,170 @@
-import { database, storage } from "../../firebase/firebase";
+import firebase, { database, storage } from "../../firebase/firebase";
 
 export const addProdukKategori = (data) => (dispatch) => {
-  database.ref("Produk/Katalog/" + data.Kategori + "/" + data.userId).push({
-    NamaProduk: data.NamaProduk,
-    Katalog: data.Katalog,
-    Kategori: data.Kategori,
-    Deskripsi: data.Deskripsi,
-    Inkluisi: data.Inkluisi,
-    FotoProduk: data.FotoProduk,
-    Harga: data.Harga,
-  });
+  console.log(data, "ini data ketika add");
+  if (data.FotoProfil !== "") {
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+    const uploadTask = storageRef
+      .child("produk/katalog/kategori/" + data.FotoProduk.name)
+      .put(data.FotoProfil);
+    uploadTask.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        console.log(snapshot, "ini snapshot");
+        const Progress = Math.round(
+          (snapshot.byteTransferred / snapshot.totalBytes) * 100
+        );
+        // data.Progress(Progress);
+        console.log(Progress, "-- upload processing");
+      },
+      (err) => {
+        console.log(err);
+      },
+      () =>
+        uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+          console.log(url, "ini url");
+          dispatch({ type: "DOWNLOAD_IMAGE", value: url });
+
+          database
+            .ref("Produk/Katalog/" + data.Kategori + "/" + data.userId)
+            .push({
+              NamaProduk: data.NamaProduk,
+              Katalog: data.Katalog,
+              Kategori: data.Kategori,
+              Deskripsi: data.Deskripsi,
+              Inkluisi: data.Inkluisi,
+              FotoProduk: data.FotoProduk,
+              Harga: data.Harga,
+              downloadURL: url,
+            });
+        })
+    );
+
+    return;
+  } else {
+    database.ref("Produk/Katalog/" + data.Kategori + "/" + data.userId).push({
+      NamaProduk: data.NamaProduk,
+      Katalog: data.Katalog,
+      Kategori: data.Kategori,
+      Deskripsi: data.Deskripsi,
+      Inkluisi: data.Inkluisi,
+      FotoProduk: data.FotoProduk,
+      Harga: data.Harga,
+    });
+
+    return;
+  }
 };
 
 export const addProdukPromo = (data) => (dispatch) => {
-  database.ref("Produk/Katalog/Promo/" + data.userId).push({
-    NamaProduk: data.NamaProduk,
-    Deskripsi: data.Deskripsi,
-    Inkluisi: data.Inkluisi,
-    FotoProduk: data.FotoProduk,
-    Harga: data.Harga,
-  });
+  console.log(data, "ini data ketika add");
+  if (data.FotoProfil !== "") {
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+    const uploadTask = storageRef
+      .child("produk/katalog/promo/" + data.FotoProduk.name)
+      .put(data.FotoProfil);
+    uploadTask.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        console.log(snapshot, "ini snapshot");
+        const Progress = Math.round(
+          (snapshot.byteTransferred / snapshot.totalBytes) * 100
+        );
+        // data.Progress(Progress);
+        console.log(Progress, "-- upload processing");
+      },
+      (err) => {
+        console.log(err);
+      },
+      () =>
+        uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+          console.log(url, "ini url");
+          dispatch({ type: "DOWNLOAD_IMAGE", value: url });
+
+          database.ref("Produk/Katalog/Promo" + data.userId).push({
+            NamaProduk: data.NamaProduk,
+            Katalog: data.Katalog,
+            Kategori: data.Kategori,
+            Deskripsi: data.Deskripsi,
+            Inkluisi: data.Inkluisi,
+            FotoProduk: data.FotoProduk,
+            Harga: data.Harga,
+            downloadURL: url,
+          });
+        })
+    );
+
+    return;
+  } else {
+    database.ref("Produk/Katalog/Promo" + data.userId).push({
+      NamaProduk: data.NamaProduk,
+      Katalog: data.Katalog,
+      Kategori: data.Kategori,
+      Deskripsi: data.Deskripsi,
+      Inkluisi: data.Inkluisi,
+      FotoProduk: data.FotoProduk,
+      Harga: data.Harga,
+    });
+
+    return;
+  }
 };
 
 export const addProdukSewa = (data) => (dispatch) => {
-  database.ref("Produk/Katalog/Sewa/" + data.userId).push({
-    NamaProduk: data.NamaProduk,
-    Deskripsi: data.Deskripsi,
-    Inkluisi: data.Inkluisi,
-    FotoProduk: data.FotoProduk,
-    Harga: data.Harga,
-  });
-};
+  console.log(data, "ini data ketika add");
+  if (data.FotoProfil !== "") {
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+    const uploadTask = storageRef
+      .child("produk/katalog/sewa/" + data.FotoProduk.name)
+      .put(data.FotoProfil);
+    uploadTask.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        console.log(snapshot, "ini snapshot");
+        const Progress = Math.round(
+          (snapshot.byteTransferred / snapshot.totalBytes) * 100
+        );
+        // data.Progress(Progress);
+        console.log(Progress, "-- upload processing");
+      },
+      (err) => {
+        console.log(err);
+      },
+      () =>
+        uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+          console.log(url, "ini url");
+          dispatch({ type: "DOWNLOAD_IMAGE", value: url });
 
-export const uploadImageProduk = (data) => (dispatch) => {
-  const storageRef = storage.ref();
-  const uploadTask = storageRef("produk/" + data.FotoProduk).put(Image);
-  uploadTask.on(
-    (snapshot) => {
-      const Progress = Math.round(
-        (snapshot.byteTransferred / snapshot.totalBytes) * 100
-      );
-      data.Progress(Progress);
-    },
-    (err) => {
-      console.log(err);
-    },
-    () =>
-      storage
-        .ref("produk")
-        .child(data.FotoProduk)
-        .getDownloadURL()
-        .then((url) => {
-          data.downloadURL(url);
+          database.ref("Produk/Katalog/Sewa" + data.userId).push({
+            NamaProduk: data.NamaProduk,
+            Katalog: data.Katalog,
+            Kategori: data.Kategori,
+            Deskripsi: data.Deskripsi,
+            Inkluisi: data.Inkluisi,
+            FotoProduk: data.FotoProduk,
+            Harga: data.Harga,
+            downloadURL: url,
+          });
         })
-  );
+    );
+
+    return;
+  } else {
+    database.ref("Produk/Katalog/Sewa" + data.userId).push({
+      NamaProduk: data.NamaProduk,
+      Katalog: data.Katalog,
+      Kategori: data.Kategori,
+      Deskripsi: data.Deskripsi,
+      Inkluisi: data.Inkluisi,
+      FotoProduk: data.FotoProduk,
+      Harga: data.Harga,
+    });
+
+    return;
+  }
 };
 
 export const deleteDataKategoriAPI = (data) => (dispatch) => {
@@ -80,77 +191,176 @@ export const deleteDataSewaAPI = (data) => (dispatch) => {
 };
 
 export const updateDataKategoriAPI = (data) => (dispatch) => {
-  const urlProfil = database.ref(
-    "Produk/Katalog/" + data.Kategori + "/" + data.produkId
-  );
-  return new Promise((resolve, reject) => {
-    urlProfil.set(
-      {
-        NamaProduk: data.NamaProduk,
-        Katalog: data.Katalog,
-        Kategori: data.Kategori,
-        Deskripsi: data.Deskripsi,
-        Inkluisi: data.Inkluisi,
-        Harga: data.Harga,
-        FotoProduk: data.FotoProduk,
+  if (data.FotoProfil !== "") {
+    console.log(data, "ini data ketika update");
+
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+    const uploadTask = storageRef
+      .child("produk/katalog/kategori/" + data.FotoProduk.name)
+      .put(data.FotoProduk);
+    uploadTask.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        console.log(snapshot, "ini snapshot");
+        const Progress = Math.round(
+          (snapshot.byteTransferred / snapshot.totalBytes) * 100
+        );
+        // data.Progress(Progress);
+        console.log(Progress, "-- upload processing");
       },
       (err) => {
-        if (err) {
-          reject(false);
-        } else {
-          resolve(true);
-        }
-      }
+        console.log(err);
+      },
+      () =>
+        uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+          console.log(url, "ini url");
+          dispatch({ type: "DOWNLOAD_IMAGE", value: url });
+
+          database
+            .ref("Produk/Katalog/" + data.Kategori + "/" + data.produkId)
+            .set({
+              NamaProduk: data.NamaProduk,
+              Katalog: data.Katalog,
+              Kategori: data.Kategori,
+              Deskripsi: data.Deskripsi,
+              Inkluisi: data.Inkluisi,
+              FotoProduk: data.FotoProduk,
+              Harga: data.Harga,
+              downloadURL: url,
+            });
+        })
     );
-  });
+
+    return;
+  } else {
+    console.log(data, "ini data ketika update");
+    database.ref("Produk/Katalog/" + data.Kategori + "/" + data.produkId).set({
+      NamaProduk: data.NamaProduk,
+      Katalog: data.Katalog,
+      Kategori: data.Kategori,
+      Deskripsi: data.Deskripsi,
+      Inkluisi: data.Inkluisi,
+      FotoProduk: data.FotoProduk,
+      Harga: data.Harga,
+      // downloadURL: url
+    });
+    return;
+  }
 };
 
 export const updateDataPromoAPI = (data) => (dispatch) => {
-  const urlProfil = database.ref("Produk/Katalog/Promo/" + data.produkId);
-  return new Promise((resolve, reject) => {
-    urlProfil.set(
-      {
-        NamaProduk: data.NamaProduk,
-        Katalog: data.Katalog,
-        Kategori: data.Kategori,
-        Deskripsi: data.Deskripsi,
-        Inkluisi: data.Inkluisi,
-        Harga: data.Harga,
-        FotoProduk: data.FotoProduk,
+  if (data.FotoProfil !== "") {
+    console.log(data, "ini data ketika update");
+
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+    const uploadTask = storageRef
+      .child("produk/katalog/Promo/" + data.FotoProduk.name)
+      .put(data.FotoProduk);
+    uploadTask.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        console.log(snapshot, "ini snapshot");
+        const Progress = Math.round(
+          (snapshot.byteTransferred / snapshot.totalBytes) * 100
+        );
+        // data.Progress(Progress);
+        console.log(Progress, "-- upload processing");
       },
       (err) => {
-        if (err) {
-          reject(false);
-        } else {
-          resolve(true);
-        }
-      }
+        console.log(err);
+      },
+      () =>
+        uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+          console.log(url, "ini url");
+          dispatch({ type: "DOWNLOAD_IMAGE", value: url });
+
+          database.ref("Produk/Katalog/Promo" + data.produkId).set({
+            NamaProduk: data.NamaProduk,
+            Katalog: data.Katalog,
+            Kategori: data.Kategori,
+            Deskripsi: data.Deskripsi,
+            Inkluisi: data.Inkluisi,
+            FotoProduk: data.FotoProduk,
+            Harga: data.Harga,
+            downloadURL: url,
+          });
+        })
     );
-  });
+
+    return;
+  } else {
+    console.log(data, "ini data ketika update");
+    database.ref("Produk/Katalog/Promo" + data.produkId).set({
+      NamaProduk: data.NamaProduk,
+      Katalog: data.Katalog,
+      Kategori: data.Kategori,
+      Deskripsi: data.Deskripsi,
+      Inkluisi: data.Inkluisi,
+      FotoProduk: data.FotoProduk,
+      Harga: data.Harga,
+      // downloadURL: url
+    });
+    return;
+  }
 };
 
 export const updateDataSewaAPI = (data) => (dispatch) => {
-  const urlProfil = database.ref("Produk/Katalog/Sewa/" + data.produkId);
-  return new Promise((resolve, reject) => {
-    urlProfil.set(
-      {
-        NamaProduk: data.NamaProduk,
-        Katalog: data.Katalog,
-        Kategori: data.Kategori,
-        Deskripsi: data.Deskripsi,
-        Inkluisi: data.Inkluisi,
-        Harga: data.Harga,
-        FotoProduk: data.FotoProduk,
+  if (data.FotoProfil !== "") {
+    console.log(data, "ini data ketika update");
+
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+    const uploadTask = storageRef
+      .child("produk/katalog/Sewa/" + data.FotoProduk.name)
+      .put(data.FotoProduk);
+    uploadTask.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        console.log(snapshot, "ini snapshot");
+        const Progress = Math.round(
+          (snapshot.byteTransferred / snapshot.totalBytes) * 100
+        );
+        // data.Progress(Progress);
+        console.log(Progress, "-- upload processing");
       },
       (err) => {
-        if (err) {
-          reject(false);
-        } else {
-          resolve(true);
-        }
-      }
+        console.log(err);
+      },
+      () =>
+        uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+          console.log(url, "ini url");
+          dispatch({ type: "DOWNLOAD_IMAGE", value: url });
+
+          database.ref("Produk/Katalog/Sewa" + data.produkId).set({
+            NamaProduk: data.NamaProduk,
+            Katalog: data.Katalog,
+            Kategori: data.Kategori,
+            Deskripsi: data.Deskripsi,
+            Inkluisi: data.Inkluisi,
+            FotoProduk: data.FotoProduk,
+            Harga: data.Harga,
+            downloadURL: url,
+          });
+        })
     );
-  });
+
+    return;
+  } else {
+    console.log(data, "ini data ketika update");
+    database.ref("Produk/Katalog/Sewa" + data.produkId).set({
+      NamaProduk: data.NamaProduk,
+      Katalog: data.Katalog,
+      Kategori: data.Kategori,
+      Deskripsi: data.Deskripsi,
+      Inkluisi: data.Inkluisi,
+      FotoProduk: data.FotoProduk,
+      Harga: data.Harga,
+      // downloadURL: url
+    });
+    return;
+  }
 };
 
 export const getDataKategoriFromAPI = (data, produkId) => (dispatch) => {
@@ -166,9 +376,11 @@ export const getDataKategoriFromAPI = (data, produkId) => (dispatch) => {
       if (!snapshot.val()) {
         return [];
       } else {
-        data.push({
-          id: 1,
-          data: snapshot.val(),
+        Object.keys(snapshot.val()).map((val) => {
+          data.push({
+            id: val,
+            data: snapshot.val()[val],
+          });
         });
       }
       //merubah objek ke array
@@ -189,9 +401,11 @@ export const getDataPromoFromAPI = (produkId) => (dispatch) => {
       if (!snapshot.val()) {
         return [];
       } else {
-        data.push({
-          id: 1,
-          data: snapshot.val(),
+        Object.keys(snapshot.val()).map((val) => {
+          data.push({
+            id: val,
+            data: snapshot.val()[val],
+          });
         });
       }
       //merubah objek ke array
@@ -212,9 +426,11 @@ export const getDataSewaFromAPI = (produkId) => (dispatch) => {
       if (!snapshot.val()) {
         return [];
       } else {
-        data.push({
-          id: 1,
-          data: snapshot.val(),
+        Object.keys(snapshot.val()).map((val) => {
+          data.push({
+            id: val,
+            data: snapshot.val()[val],
+          });
         });
       }
       //merubah objek ke array

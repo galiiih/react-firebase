@@ -19,6 +19,7 @@ export const registerUserAPI = (data) => (dispatch) => {
         // Signed in
         var user = userCredential.user;
         console.log("sukses: ", user);
+        alert("anda sudah terdaftar");
         dispatch({ type: "CHANGE_LOADING", value: false });
         resolve(true);
       })
@@ -47,6 +48,7 @@ export const loginUserAPI = (data) => (dispatch) => {
           refreshToken: user.refreshToken,
         };
         console.log("sukses: ", user);
+        alert("anda berhasil masuk");
         dispatch({ type: "CHANGE_LOADING", value: false });
         dispatch({ type: "CHANGE_LOGIN", value: true });
         dispatch({ type: "CHANGE_USER", value: dataUser });
@@ -65,7 +67,7 @@ export const loginUserAPI = (data) => (dispatch) => {
 
 export const addDataToAPI = (data) => (dispatch) => {
   console.log(data,'ini data ketika add')
-  if(data.FotoProfil != ""){
+  if(data.FotoProfil !== ""){
     const storage = firebase.storage();
     const storageRef = storage.ref();
     const uploadTask = storageRef.child("profil/" + data.FotoProfil.name).put(data.FotoProfil);
@@ -145,7 +147,7 @@ export const getDataFromAPI = (userId) => (dispatch) => {
 };
 
 export const updateDataAPI = (data) => (dispatch) => {
-  if(data.FotoProfil != ""){
+  if(data.FotoProfil !== ""){
   console.log(data,'ini data ketika update')
 
     const storage = firebase.storage();
@@ -188,32 +190,6 @@ export const updateDataAPI = (data) => (dispatch) => {
     return;
   }else{
   console.log(data,'ini data ketika update')
-
-    // const urlProfil = database.ref(
-    //   "User/Customer/" + data.userId + "/" + data.profilId
-    // );
-    // return new Promise((resolve, reject) => {
-    //   urlProfil.set(
-    //     {
-    //       Username: data.Username,
-    //       Email: data.Email,
-    //       Password: data.Password,
-    //       NoHp: data.NoHp,
-    //       NoTelp: data.NoTelp,
-    //       FotoProfil: data.FotoProfil,
-    //       Alamat: data.Alamat,
-    //       Role: data.Role,
-    //       downloadURL: data.downloadURL
-    //     },
-    //     (err) => {
-    //       if (err) {
-    //         reject(false);
-    //       } else {
-    //         resolve(true);
-    //       }
-    //     }
-    //   );
-    // });
     database.ref(
       "User/Customer/" + data.userId + "/" + data.profilId
     ).set({
