@@ -102,19 +102,21 @@ export const addDataToAPI = (data) => (dispatch) => {
     );
 
     return;
-  }
+  }else{
+    database.ref("User/Customer/" + data.userId).push({
+      Username: data.Username,
+      Email: data.Email,
+      Password: data.Password,
+      NoHp: data.NoHp,
+      NoTelp: data.NoTelp,
+      FotoProfil: data.FotoProfil,
+      Alamat: data.Alamat,
+      Role: data.Role,
+      // downloadURL: data.downloadURL
+    });
 
-  database.ref("User/Customer/" + data.userId).push({
-    Username: data.Username,
-    Email: data.Email,
-    Password: data.Password,
-    NoHp: data.NoHp,
-    NoTelp: data.NoTelp,
-    FotoProfil: data.FotoProfil,
-    Alamat: data.Alamat,
-    Role: data.Role,
-    downloadURL: data.downloadURL
-  });
+    return;
+  }
 };
 
 export const getDataFromAPI = (userId) => (dispatch) => {
@@ -143,8 +145,9 @@ export const getDataFromAPI = (userId) => (dispatch) => {
 };
 
 export const updateDataAPI = (data) => (dispatch) => {
-  console.log(data,'ini data ketika update')
   if(data.FotoProfil != ""){
+  console.log(data,'ini data ketika update')
+
     const storage = firebase.storage();
     const storageRef = storage.ref();
     const uploadTask = storageRef.child("profil/" + data.FotoProfil).put(data.FotoProfil);
@@ -183,34 +186,49 @@ export const updateDataAPI = (data) => (dispatch) => {
     );
 
     return;
-  }
-  
-  const urlProfil = database.ref(
-    "User/Customer/" + data.userId + "/" + data.profilId
-  );
-  return new Promise((resolve, reject) => {
-    urlProfil.set(
-      {
-        Username: data.Username,
-        Email: data.Email,
-        Password: data.Password,
-        NoHp: data.NoHp,
-        NoTelp: data.NoTelp,
-        FotoProfil: data.FotoProfil,
-        Alamat: data.Alamat,
-        Role: data.Role,
-        downloadURL: data.downloadURL
-      },
-      (err) => {
-        if (err) {
-          reject(false);
-        } else {
-          resolve(true);
-        }
-      }
-    );
-  });
+  }else{
+  console.log(data,'ini data ketika update')
 
+    // const urlProfil = database.ref(
+    //   "User/Customer/" + data.userId + "/" + data.profilId
+    // );
+    // return new Promise((resolve, reject) => {
+    //   urlProfil.set(
+    //     {
+    //       Username: data.Username,
+    //       Email: data.Email,
+    //       Password: data.Password,
+    //       NoHp: data.NoHp,
+    //       NoTelp: data.NoTelp,
+    //       FotoProfil: data.FotoProfil,
+    //       Alamat: data.Alamat,
+    //       Role: data.Role,
+    //       downloadURL: data.downloadURL
+    //     },
+    //     (err) => {
+    //       if (err) {
+    //         reject(false);
+    //       } else {
+    //         resolve(true);
+    //       }
+    //     }
+    //   );
+    // });
+    database.ref(
+      "User/Customer/" + data.userId + "/" + data.profilId
+    ).set({
+      Username: data.Username,
+      Email: data.Email,
+      Password: data.Password,
+      NoHp: data.NoHp,
+      NoTelp: data.NoTelp,
+      FotoProfil: data.FotoProfil,
+      Alamat: data.Alamat,
+      Role: data.Role,
+      // downloadURL: url
+    });
+    return;
+  }
   
 };
 
