@@ -4,10 +4,12 @@ const initialState = {
   isLoading: false,
   user: {},
   profil: [],
-  produk: []
+  produk: [],
+  downloadURL: ""
 };
 
 const reducer = (state = initialState, action) => {
+  console.log(action, 'ini action reducer')
   if (action.type === "CHANGE_POPUP") {
     return {
       ...state,
@@ -42,6 +44,13 @@ const reducer = (state = initialState, action) => {
     return {
       ...state,
       produk: action.value,
+    };
+  }
+
+  if (action.type === "DOWNLOAD_IMAGE") {
+    return {
+      ...state,
+      downloadURL: action.value,
     };
   }
   return state;

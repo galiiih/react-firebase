@@ -64,6 +64,46 @@ export const loginUserAPI = (data) => (dispatch) => {
 };
 
 export const addDataToAPI = (data) => (dispatch) => {
+  console.log(data,'ini data ketika add')
+  if(data.FotoProfil != ""){
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+    const uploadTask = storageRef.child("profil/" + data.FotoProfil).put(data.FotoProfil);
+    uploadTask.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        console.log(snapshot,'ini snapshot')
+        const Progress = Math.round(
+          (snapshot.byteTransferred / snapshot.totalBytes) * 100
+        );
+        // data.Progress(Progress);
+        console.log(Progress,'-- upload processing')
+      },
+      (err) => {
+        console.log(err);
+      },
+      () =>
+      uploadTask.snapshot.ref.getDownloadURL().then((url) =>{
+        console.log(url,'ini url')
+        dispatch({ type: "DOWNLOAD_IMAGE", value: url });
+
+        database.ref("User/Customer/" + data.userId).push({
+          Username: data.Username,
+          Email: data.Email,
+          Password: data.Password,
+          NoHp: data.NoHp,
+          NoTelp: data.NoTelp,
+          FotoProfil: data.FotoProfil,
+          Alamat: data.Alamat,
+          Role: data.Role,
+          downloadURL: url
+        });
+      })
+    );
+
+    return;
+  }
+
   database.ref("User/Customer/" + data.userId).push({
     Username: data.Username,
     Email: data.Email,
@@ -73,6 +113,7 @@ export const addDataToAPI = (data) => (dispatch) => {
     FotoProfil: data.FotoProfil,
     Alamat: data.Alamat,
     Role: data.Role,
+    downloadURL: data.downloadURL
   });
 };
 
@@ -87,10 +128,12 @@ export const getDataFromAPI = (userId) => (dispatch) => {
       if (!snapshot.val()) {
         return [];
       } else {
-        data.push({
-          id: 1,
-          data: snapshot.val(),
-        });
+        Object.keys(snapshot.val()).map(val => {
+          data.push({
+            id: val,
+            data: snapshot.val()[val]
+          })
+        })
       }
       //merubah objek ke array
       dispatch({ type: "SET_PROFIL", value: data });
@@ -100,6 +143,48 @@ export const getDataFromAPI = (userId) => (dispatch) => {
 };
 
 export const updateDataAPI = (data) => (dispatch) => {
+  console.log(data,'ini data ketika update')
+  if(data.FotoProfil != ""){
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+    const uploadTask = storageRef.child("profil/" + data.FotoProfil).put(data.FotoProfil);
+    uploadTask.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        console.log(snapshot,'ini snapshot')
+        const Progress = Math.round(
+          (snapshot.byteTransferred / snapshot.totalBytes) * 100
+        );
+        // data.Progress(Progress);
+        console.log(Progress,'-- upload processing')
+      },
+      (err) => {
+        console.log(err);
+      },
+      () =>
+      uploadTask.snapshot.ref.getDownloadURL().then((url) =>{
+        console.log(url,'ini url')
+        dispatch({ type: "DOWNLOAD_IMAGE", value: url });
+
+        database.ref(
+          "User/Customer/" + data.userId + "/" + data.profilId
+        ).set({
+          Username: data.Username,
+          Email: data.Email,
+          Password: data.Password,
+          NoHp: data.NoHp,
+          NoTelp: data.NoTelp,
+          FotoProfil: data.FotoProfil,
+          Alamat: data.Alamat,
+          Role: data.Role,
+          downloadURL: url
+        });
+      })
+    );
+
+    return;
+  }
+  
   const urlProfil = database.ref(
     "User/Customer/" + data.userId + "/" + data.profilId
   );
@@ -114,6 +199,7 @@ export const updateDataAPI = (data) => (dispatch) => {
         FotoProfil: data.FotoProfil,
         Alamat: data.Alamat,
         Role: data.Role,
+        downloadURL: data.downloadURL
       },
       (err) => {
         if (err) {
@@ -124,6 +210,8 @@ export const updateDataAPI = (data) => (dispatch) => {
       }
     );
   });
+
+  
 };
 
 export const deleteDataAPI = (data) => (dispatch) => {
@@ -133,28 +221,4 @@ export const deleteDataAPI = (data) => (dispatch) => {
   return new Promise((resolve, reject) => {
     urlProfil.remove();
   });
-};
-
-export const uploadImageProfile = (data) => (dispatch) => {
-  const storageRef = storage.ref();
-  const uploadTask = storageRef("profil/" + data.FotoProfil).put(Image);
-  uploadTask.on(
-    (snapshot) => {
-      const Progress = Math.round(
-        (snapshot.byteTransferred / snapshot.totalBytes) * 100
-      );
-      data.Progress(Progress);
-    },
-    (err) => {
-      console.log(err);
-    },
-    () =>
-      storage
-        .ref("profil")
-        .child(data.FotoProfil)
-        .getDownloadURL()
-        .then((url) => {
-          data.downloadURL(url);
-        })
-  );
 };

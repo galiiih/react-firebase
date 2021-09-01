@@ -13,6 +13,7 @@ import "./Dashboard.scss";
 const reduxState = (state) => ({
   dataUser: state.user,
   profil: state.profil,
+  downloadURL: state.downloadURL
 });
 
 const reduxDispatch = (dispatch) => ({
@@ -20,10 +21,9 @@ const reduxDispatch = (dispatch) => ({
   getProfil: (data) => dispatch(getDataFromAPI(data)),
   updateProfil: (data) => dispatch(updateDataAPI(data)),
   deleteProfil: (data) => dispatch(deleteDataAPI(data)),
-  uploadImage: (data) => dispatch(uploadImageProfile(data)),
 });
 
-const email = JSON.parse(localStorage.getItem("dataUser")).email || "";
+const email = localStorage.getItem("dataUser") ? JSON.parse(localStorage.getItem("dataUser")).email : "";
 class Home extends Component {
   state = {
     Username: "",
@@ -33,7 +33,6 @@ class Home extends Component {
     NoTelp: "",
     FotoProfil: "",
     Progress: 0,
-    downloadURL: "",
     Alamat: "",
     Role: "Customer",
     textBtn: "SIMPAN",
@@ -55,9 +54,6 @@ class Home extends Component {
         [type]: e.target.value,
       });
     }
-    // this.setState({
-    //   [type]: e.target.value
-    // })
   };
 
   handleSaveProfil = () => {
@@ -67,15 +63,15 @@ class Home extends Component {
       NoTelp,
       FotoProfil,
       Progress,
-      downloadURL,
       Alamat,
       Email,
       Password,
       Role,
       profilId,
+      textBtn
     } = this.state;
     
-    const { saveProfil, textBtn, updateProfil, uploadImage } = this.props;
+    const { saveProfil, updateProfil, uploadImage, downloadURL } = this.props;
     const dataUser = JSON.parse(localStorage.getItem("dataUser"));
 
     const data = {
@@ -91,19 +87,32 @@ class Home extends Component {
       Role: Role,
       userId: dataUser.uid,
     };
+    
 
-    if (textBtn === "SIMPAN") {
-      saveProfil(data);
-      uploadImage(data);
+    if (textBtn == "SIMPAN") {
+      console.log('simpen')
+      const nData = {
+        ...data,
+        downloadURL: this.props.downloadURL
+      }
+      saveProfil(nData);
+      // uploadImage(data)();
 
       // this.props.getProfil(dataUser.uid);
     } else {
+      console.log('update')
+
       data.profilId = profilId;
+      const nData = {
+        ...data,
+        downloadURL: this.props.downloadURL
+      }
       updateProfil(data);
       // this.props.getProfil(dataUser.uid);
     }
 
-    console.log(data);
+    this.props.getProfil(dataUser.uid);
+
   };
 
   updateProfil = (profil) => {
@@ -147,9 +156,10 @@ class Home extends Component {
   };
 
   render() {
-    const { profil, Progress } = this.props;
+    const { profil, Progress, downloadURL } = this.props;
     const { updateProfil, cancelUpdate, deleteProfil, handleSaveProfil } = this;
     console.log("profil", profil);
+    console.log(this.state,'ini state')
     return (
       <div className="container">
         <div className="input-form">
@@ -189,12 +199,12 @@ class Home extends Component {
             onChange={(e) => this.handleChange(e, "NoTelp")}
           />
           <input
-            id="FotoProfil"
+            id="file"
             placeholder="input Foto Profil"
             className="input-title"
             type="file"
-            accept="image/*"
-            value={this.state.FotoProfil}
+            // accept="image/*"
+            // value={this.state.FotoProfil}
             onChange={(e) => this.handleChange(e, "FotoProfil")}
           />
           <textarea
@@ -229,7 +239,7 @@ class Home extends Component {
         {profil.length > 0 ? (
           <Fragment>
             {profil.map(profil => {
-              // console.log(profil,'===')
+              console.log(profil.data.downloadURL,'===')
               return (
                 <div
                   className="card-content"
@@ -242,7 +252,8 @@ class Home extends Component {
                   <p className="content">{profil.data.NoHp}</p>
                   <p className="content">{profil.data.NoTelp}</p>
                   {/* <p className="content">{profil.data.downloadURL}</p> */}
-                  <img src={profil.data.downloadURL || "http://via.placeholder.com/150"} alt="profil-image"/>
+                  <p>{profil.data.downloadURL}</p>
+                  <img src={profil.data.downloadURL || "http://via.placeholder.com/150"} width="150px" height="150px" alt="profil-image"/>
                   <p className="content">{profil.data.Alamat}</p>
                   <p className="content">{profil.data.Role}</p>
                   <div
