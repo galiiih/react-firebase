@@ -6,8 +6,11 @@ import Login from "../login/Login";
 import Register from "../register/Register";
 import { store } from "../../../config/redux/index";
 import { Provider } from "react-redux";
-import Dashboard from "../Dashboard/Dashboard";
+import Profil from "../profile/profil";
 import kelolaProduk from "../kelolaProduk/kelolaProduk";
+import forgotPassword from "../forgotPassword/forgotPassword";
+import pesanPaket from "../pesan/pesanPaket";
+import kategori from "../kategori/kategori";
 
 class App extends Component {
   render() {
@@ -21,9 +24,12 @@ class App extends Component {
           {/* <JumbotronComponent /> */}
           <Router>
             <Route path="/login" exact component={Login}/>
-            <Route path="/dashboard" component={Dashboard}/>
+            <Route path="/profil" component={Profil}/>
             <Route path="/register" component={Register}/>
             <Route path="/kelolaProduk" component={kelolaProduk}/>
+            <Route path="/forgotPassword" component={forgotPassword}/>
+            <Route path="/pesan/paket" component={pesanPaket}/>
+            <Route path="/kategori" component={kategori}/>
           </Router>
         </div>
       </Provider>

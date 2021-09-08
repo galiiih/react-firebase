@@ -256,7 +256,7 @@ class kelolaProduk extends Component {
     deleteProduk(data);
   };
   render() {
-    const {produk} = this.props;
+    const { produk } = this.props;
     const { cancelUpdate } = this;
     return (
       <div className="container">
@@ -268,14 +268,24 @@ class kelolaProduk extends Component {
             value={this.state.NamaProduk}
             onChange={(e) => this.handleChange(e, "NamaProduk")}
           />
-          <select className="form-select" id="katalog" value={this.state.Katalog} onChange={(e) => this.handleChange(e, "Katalog")}>
+          <select
+            className="form-select"
+            id="katalog"
+            value={this.state.Katalog}
+            onChange={(e) => this.handleChange(e, "Katalog")}
+          >
             <option selected>Pilih katalog</option>
             <option value="1">Cetak</option>
             <option value="2">Kategori</option>
             <option value="3">Promo</option>
             <option value="4">Sewa</option>
           </select>
-          <select className="form-select" id="kategori" value={this.state.Kategori} onChange={(e) => this.handleChange(e, "Kategori")}>
+          <select
+            className="form-select"
+            id="kategori"
+            value={this.state.Kategori}
+            onChange={(e) => this.handleChange(e, "Kategori")}
+          >
             <option selected>Pilih Kategori</option>
             <option value="1">Birthday</option>
             <option value="2">Family</option>
@@ -335,8 +345,8 @@ class kelolaProduk extends Component {
         <hr />
         {produk.length > 0 ? (
           <Fragment>
-            {produk.map(produk => {
-              console.log(produk.data.downloadURL,'===')
+            {produk.map((produk) => {
+              console.log(produk.data.downloadURL, "===");
               return (
                 <div
                   className="card-content"
@@ -350,7 +360,15 @@ class kelolaProduk extends Component {
                   <p className="content">{produk.data.Inkluisi}</p>
                   <p className="content">{produk.data.Harga}</p>
                   {/* <p>{profil.data.downloadURL}</p> */}
-                  <img src={produk.data.downloadURL || "http://via.placeholder.com/150"} width="150px" height="150px" alt="profil-image"/>
+                  <img
+                    src={
+                      produk.data.downloadURL ||
+                      "http://via.placeholder.com/150"
+                    }
+                    width="150px"
+                    height="150px"
+                    alt="profil-image"
+                  />
                   <div
                     className="delete-btn"
                     onClick={(e) => this.deleteProduk(e, produk)}

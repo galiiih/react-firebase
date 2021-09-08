@@ -7,7 +7,7 @@ import {
   getDataFromAPI,
   updateDataAPI,
 } from "../../../config/redux/actions";
-import "./Dashboard.scss";
+import "./profil.scss";
 
 const reduxState = (state) => ({
   dataUser: state.user,
@@ -23,7 +23,7 @@ const reduxDispatch = (dispatch) => ({
 });
 
 const email = localStorage.getItem("dataUser") ? JSON.parse(localStorage.getItem("dataUser")).email : "";
-class Home extends Component {
+class Profil extends Component {
   state = {
     Username: "",
     Email: email,
@@ -271,4 +271,4 @@ class Home extends Component {
   }
 }
 
-export default connect(reduxState, reduxDispatch)(Home);
+export default connect(reduxState, reduxDispatch)(Profil);

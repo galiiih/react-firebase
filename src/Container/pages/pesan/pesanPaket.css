@@ -1,0 +1,17 @@
+.save-btn {
+    padding: 8px 20px;
+    border-radius: 4px;
+    background: blue;
+    border: 2px solid;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    outline: none;
+}
+
+.cancel {
+    border: 2px solid;
+    color: white;
+    margin-right: 105px;
+}

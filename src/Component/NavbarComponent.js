@@ -68,10 +68,16 @@ const NavbarComponent = (props) => {
             </Nav>
             <Nav className="mr-auto" navbar>
               <NavItem>
-                <NavLink href="/login" onClick={handleLogout}>Logout</NavLink>
+                <NavLink href="/profil">Profil</NavLink>
               </NavItem>
             </Nav>
-            <NavbarText>Profil</NavbarText>
+            <Nav className="mr-auto" navbar>
+              <NavItem>
+                <NavLink href="/logout" onClick={handleLogout}>Logout</NavLink>
+              </NavItem>
+            </Nav>
+            
+            <NavbarText>img profil</NavbarText>
           </Collapse>
         </Container>
       </Navbar>
