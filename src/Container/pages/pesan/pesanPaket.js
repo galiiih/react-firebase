@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import moment from "moment";
 import { FormGroup } from "reactstrap";
 import Datetime from "react-datetime";
-import Button from "../../../Component/atoms/buttons";
 
 // import css
 import "react-datetime/css/react-datetime.css";

@@ -68,7 +68,7 @@ class kelolaProduk extends Component {
   handleChange = (e, type) => {
     if (type === "FotoProduk") {
       this.setState({
-        FotoProfil: e.target.files[0],
+        FotoProduk: e.target.files[0],
       });
     } else {
       this.setState({
@@ -117,49 +117,57 @@ class kelolaProduk extends Component {
       userId: dataUser.uid,
     };
 
+    const katalog = ["kategori", "cetak", "promo", "sewa"];
+    const kategori = [
+      "wedding",
+      "nature",
+      "travel",
+      "family",
+      "filming",
+      "graduation",
+      "pasFoto",
+      "birthday",
+    ];
+
+    const katalog1 = "kategori";
+    const katalog2 = "cetak";
+    const katalog3 = "promo";
+    const katalog4 = "sewa";
+
+    const kategori1 = "wedding";
+    const kategori2 = "nature";
+    const kategori3 = "travel";
+    const kategori4 = "family";
+    const kategori5 = "filming";
+    const kategori6 = "graduation";
+    const kategori7 = "pasFoto";
+    const kategori8 = "birthday";
+
     if (textBtn === "SIMPAN") {
-      if (
-        (Kategori === "Birthday",
-        "Family",
-        "Filming",
-        "Graduation",
-        "Nature",
-        "Wedding",
-        "Travel",
-        "Pas Foto")
-      ) {
+      if (katalog.includes(katalog1)) {
         console.log("simpen");
         const nData = {
           ...data,
           downloadURL: this.props.downloadURL,
         };
         saveKategori(nData);
-      } else if (Katalog === "Promo") {
-        console.log("simpen");
-        const nData = {
-          ...data,
-          downloadURL: this.props.downloadURL,
-        };
-        savePromo(nData);
-      } else if (Katalog === "Sewa") {
+      } else if (katalog.includes(katalog4)) {
         console.log("simpen");
         const nData = {
           ...data,
           downloadURL: this.props.downloadURL,
         };
         saveSewa(nData);
+      } else if (Katalog.includes(katalog3)) {
+        console.log("simpen");
+        const nData = {
+          ...data,
+          downloadURL: this.props.downloadURL,
+        };
+        savePromo(nData);
       }
     } else {
-      if (
-        (Kategori === "Birthday",
-        "Family",
-        "Filming",
-        "Graduation",
-        "Nature",
-        "Wedding",
-        "Travel",
-        "Pas Foto")
-      ) {
+      if (kategori.includes(katalog1)) {
         console.log("update");
         data.produkId = produkId;
         const nData = {
@@ -167,7 +175,7 @@ class kelolaProduk extends Component {
           downloadURL: this.props.downloadURL,
         };
         updateKategori(nData);
-      } else if (Katalog === "Promo") {
+      } else if (Katalog.includes(katalog3)) {
         console.log("update");
         data.produkId = produkId;
         const nData = {
@@ -175,7 +183,7 @@ class kelolaProduk extends Component {
           downloadURL: this.props.downloadURL,
         };
         updatePromo(nData);
-      } else if (Katalog === "Sewa") {
+      } else if (Katalog.includes(katalog4)) {
         console.log("update");
         data.produkId = produkId;
         const nData = {
@@ -185,6 +193,16 @@ class kelolaProduk extends Component {
         updateSewa(nData);
       }
     }
+    this.setState({
+      NamaProduk: "",
+      Katalog: "",
+      Kategori: "",
+      Deskripsi: "",
+      Inkluisi: "",
+      Harga: "",
+      FotoProduk: "",
+      textBtn: "SIMPAN",
+    });
     console.log(data);
   };
 
@@ -275,10 +293,10 @@ class kelolaProduk extends Component {
             onChange={(e) => this.handleChange(e, "Katalog")}
           >
             <option selected>Pilih katalog</option>
-            <option value="1">Cetak</option>
-            <option value="2">Kategori</option>
-            <option value="3">Promo</option>
-            <option value="4">Sewa</option>
+            <option value="Cetak">Cetak</option>
+            <option value="Kategori">Kategori</option>
+            <option value="Promo">Promo</option>
+            <option value="Sewa">Sewa</option>
           </select>
           <select
             className="form-select"
@@ -287,14 +305,14 @@ class kelolaProduk extends Component {
             onChange={(e) => this.handleChange(e, "Kategori")}
           >
             <option selected>Pilih Kategori</option>
-            <option value="1">Birthday</option>
-            <option value="2">Family</option>
-            <option value="3">Filming</option>
-            <option value="4">Graduation</option>
-            <option value="5">Nature</option>
-            <option value="6">Wedding</option>
-            <option value="7">Travel</option>
-            <option value="8">Pas Foto</option>
+            <option value="Birthday">Birthday</option>
+            <option value="Family">Family</option>
+            <option value="Filming">Filming</option>
+            <option value="Graduation">Graduation</option>
+            <option value="Nature">Nature</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Travel">Travel</option>
+            <option value="pasFoto">Pas Foto</option>
           </select>
           <textarea
             id="deskripsi"
@@ -326,7 +344,7 @@ class kelolaProduk extends Component {
             className="input-title"
             type="file"
             accept="image/*"
-            value={this.state.FotoProduk}
+            // value={this.state.FotoProduk}
             onChange={(e) => this.handleChange(e, "FotoProduk")}
           />
           <div className="action-wrapper">

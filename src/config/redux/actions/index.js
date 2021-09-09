@@ -70,7 +70,7 @@ export const addDataToAPI = (data) => (dispatch) => {
   if(data.FotoProfil !== ""){
     const storage = firebase.storage();
     const storageRef = storage.ref();
-    const uploadTask = storageRef.child("profil/" + data.FotoProfil.name).put(data.FotoProfil);
+    const uploadTask = storageRef.child("profil/customer/" + data.FotoProfil.name).put(data.FotoProfil);
     uploadTask.on(
       firebase.storage.TaskEvent.STATE_CHANGED,
       (snapshot) => {

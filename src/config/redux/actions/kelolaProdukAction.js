@@ -2,12 +2,19 @@ import firebase, { database, storage } from "../../firebase/firebase";
 
 export const addProdukKategori = (data) => (dispatch) => {
   console.log(data, "ini data ketika add");
-  if (data.FotoProfil !== "") {
+  if (data.FotoProduk !== "") {
     const storage = firebase.storage();
     const storageRef = storage.ref();
     const uploadTask = storageRef
-      .child("produk/katalog/kategori/" + data.FotoProduk.name)
-      .put(data.FotoProfil);
+      .child(
+        "produk/katalog/kategori/" +
+          data.Kategori +
+          "/" +
+          data.userId +
+          "/" +
+          data.FotoProduk.name
+      )
+      .put(data.FotoProduk);
     uploadTask.on(
       firebase.storage.TaskEvent.STATE_CHANGED,
       (snapshot) => {
@@ -27,7 +34,7 @@ export const addProdukKategori = (data) => (dispatch) => {
           dispatch({ type: "DOWNLOAD_IMAGE", value: url });
 
           database
-            .ref("Produk/Katalog/" + data.Kategori + "/" + data.userId)
+            .ref("Produk/Katalog/Kategori/" + data.Kategori + "/" + data.userId)
             .push({
               NamaProduk: data.NamaProduk,
               Katalog: data.Katalog,
@@ -43,28 +50,29 @@ export const addProdukKategori = (data) => (dispatch) => {
 
     return;
   } else {
-    database.ref("Produk/Katalog/" + data.Kategori + "/" + data.userId).push({
-      NamaProduk: data.NamaProduk,
-      Katalog: data.Katalog,
-      Kategori: data.Kategori,
-      Deskripsi: data.Deskripsi,
-      Inkluisi: data.Inkluisi,
-      FotoProduk: data.FotoProduk,
-      Harga: data.Harga,
-    });
-
+    database
+      .ref("Produk/Katalog/Kategori/" + data.Kategori + "/" + data.userId)
+      .push({
+        NamaProduk: data.NamaProduk,
+        Katalog: data.Katalog,
+        Kategori: data.Kategori,
+        Deskripsi: data.Deskripsi,
+        Inkluisi: data.Inkluisi,
+        FotoProduk: data.FotoProduk,
+        Harga: data.Harga,
+      });
     return;
   }
 };
 
 export const addProdukPromo = (data) => (dispatch) => {
   console.log(data, "ini data ketika add");
-  if (data.FotoProfil !== "") {
+  if (data.FotoProduk !== "") {
     const storage = firebase.storage();
     const storageRef = storage.ref();
     const uploadTask = storageRef
-      .child("produk/katalog/promo/" + data.FotoProduk.name)
-      .put(data.FotoProfil);
+      .child("produk/katalog/promo/" + data.userId + "/" + data.FotoProduk.name)
+      .put(data.FotoProduk);
     uploadTask.on(
       firebase.storage.TaskEvent.STATE_CHANGED,
       (snapshot) => {
@@ -83,10 +91,9 @@ export const addProdukPromo = (data) => (dispatch) => {
           console.log(url, "ini url");
           dispatch({ type: "DOWNLOAD_IMAGE", value: url });
 
-          database.ref("Produk/Katalog/Promo" + data.userId).push({
+          database.ref("Produk/Katalog/Promo/" + data.userId).push({
             NamaProduk: data.NamaProduk,
             Katalog: data.Katalog,
-            Kategori: data.Kategori,
             Deskripsi: data.Deskripsi,
             Inkluisi: data.Inkluisi,
             FotoProduk: data.FotoProduk,
@@ -98,28 +105,26 @@ export const addProdukPromo = (data) => (dispatch) => {
 
     return;
   } else {
-    database.ref("Produk/Katalog/Promo" + data.userId).push({
+    database.ref("Produk/Katalog/Promo/" + data.userId).push({
       NamaProduk: data.NamaProduk,
       Katalog: data.Katalog,
-      Kategori: data.Kategori,
       Deskripsi: data.Deskripsi,
       Inkluisi: data.Inkluisi,
       FotoProduk: data.FotoProduk,
       Harga: data.Harga,
     });
-
     return;
   }
 };
 
 export const addProdukSewa = (data) => (dispatch) => {
   console.log(data, "ini data ketika add");
-  if (data.FotoProfil !== "") {
+  if (data.FotoProduk !== "") {
     const storage = firebase.storage();
     const storageRef = storage.ref();
     const uploadTask = storageRef
-      .child("produk/katalog/sewa/" + data.FotoProduk.name)
-      .put(data.FotoProfil);
+      .child("produk/katalog/sewa/" + data.userId + "/" + data.FotoProduk.name)
+      .put(data.FotoProduk);
     uploadTask.on(
       firebase.storage.TaskEvent.STATE_CHANGED,
       (snapshot) => {
@@ -138,10 +143,9 @@ export const addProdukSewa = (data) => (dispatch) => {
           console.log(url, "ini url");
           dispatch({ type: "DOWNLOAD_IMAGE", value: url });
 
-          database.ref("Produk/Katalog/Sewa" + data.userId).push({
+          database.ref("Produk/Katalog/Sewa/" + data.userId).push({
             NamaProduk: data.NamaProduk,
             Katalog: data.Katalog,
-            Kategori: data.Kategori,
             Deskripsi: data.Deskripsi,
             Inkluisi: data.Inkluisi,
             FotoProduk: data.FotoProduk,
@@ -150,54 +154,58 @@ export const addProdukSewa = (data) => (dispatch) => {
           });
         })
     );
-
     return;
   } else {
-    database.ref("Produk/Katalog/Sewa" + data.userId).push({
+    database.ref("Produk/Katalog/Sewa/" + data.userId).push({
       NamaProduk: data.NamaProduk,
       Katalog: data.Katalog,
-      Kategori: data.Kategori,
       Deskripsi: data.Deskripsi,
       Inkluisi: data.Inkluisi,
       FotoProduk: data.FotoProduk,
       Harga: data.Harga,
     });
-
     return;
   }
 };
 
 export const deleteDataKategoriAPI = (data) => (dispatch) => {
-  const urlProfil = database.ref(
-    "Produk/Katalog/" + data.Kategori + "/" + data.produkId
+  const urlProduk = database.ref(
+    "Produk/Katalog/Kategori/" + data.Kategori + "/" + data.produkId
   );
   return new Promise((resolve, reject) => {
-    urlProfil.remove();
+    urlProduk.remove();
   });
 };
 
 export const deleteDataPromoAPI = (data) => (dispatch) => {
-  const urlProfil = database.ref("Produk/Katalog/Promo/" + data.produkId);
+  const urlProduk = database.ref("Produk/Katalog/Promo/" + data.produkId);
   return new Promise((resolve, reject) => {
-    urlProfil.remove();
+    urlProduk.remove();
   });
 };
 
 export const deleteDataSewaAPI = (data) => (dispatch) => {
-  const urlProfil = database.ref("Produk/Katalog/Sewa/" + data.produkId);
+  const urlProduk = database.ref("Produk/Katalog/Sewa/" + data.produkId);
   return new Promise((resolve, reject) => {
-    urlProfil.remove();
+    urlProduk.remove();
   });
 };
 
 export const updateDataKategoriAPI = (data) => (dispatch) => {
-  if (data.FotoProfil !== "") {
+  if (data.FotoProduk !== "") {
     console.log(data, "ini data ketika update");
 
     const storage = firebase.storage();
     const storageRef = storage.ref();
     const uploadTask = storageRef
-      .child("produk/katalog/kategori/" + data.FotoProduk.name)
+      .child(
+        "produk/katalog/kategori/" +
+          data.Kategori +
+          "/" +
+          data.userId +
+          "/" +
+          data.FotoProduk.name
+      )
       .put(data.FotoProduk);
     uploadTask.on(
       firebase.storage.TaskEvent.STATE_CHANGED,
@@ -218,7 +226,14 @@ export const updateDataKategoriAPI = (data) => (dispatch) => {
           dispatch({ type: "DOWNLOAD_IMAGE", value: url });
 
           database
-            .ref("Produk/Katalog/" + data.Kategori + "/" + data.produkId)
+            .ref(
+              "Produk/Katalog/Kategori/" +
+                data.Kategori +
+                "/" +
+                data.userId +
+                "/" +
+                data.produkId
+            )
             .set({
               NamaProduk: data.NamaProduk,
               Katalog: data.Katalog,
@@ -231,32 +246,40 @@ export const updateDataKategoriAPI = (data) => (dispatch) => {
             });
         })
     );
-
     return;
   } else {
     console.log(data, "ini data ketika update");
-    database.ref("Produk/Katalog/" + data.Kategori + "/" + data.produkId).set({
-      NamaProduk: data.NamaProduk,
-      Katalog: data.Katalog,
-      Kategori: data.Kategori,
-      Deskripsi: data.Deskripsi,
-      Inkluisi: data.Inkluisi,
-      FotoProduk: data.FotoProduk,
-      Harga: data.Harga,
-      // downloadURL: url
-    });
+    database
+      .ref(
+        "Produk/Katalog/Kategori/" +
+          data.Kategori +
+          "/" +
+          data.userId +
+          "/" +
+          data.produkId
+      )
+      .set({
+        NamaProduk: data.NamaProduk,
+        Katalog: data.Katalog,
+        Kategori: data.Kategori,
+        Deskripsi: data.Deskripsi,
+        Inkluisi: data.Inkluisi,
+        FotoProduk: data.FotoProduk,
+        Harga: data.Harga,
+        // downloadURL: url
+      });
     return;
   }
 };
 
 export const updateDataPromoAPI = (data) => (dispatch) => {
-  if (data.FotoProfil !== "") {
+  if (data.FotoProduk !== "") {
     console.log(data, "ini data ketika update");
 
     const storage = firebase.storage();
     const storageRef = storage.ref();
     const uploadTask = storageRef
-      .child("produk/katalog/Promo/" + data.FotoProduk.name)
+      .child("produk/katalog/Promo/" + data.userId + "/" + data.FotoProduk.name)
       .put(data.FotoProduk);
     uploadTask.on(
       firebase.storage.TaskEvent.STATE_CHANGED,
@@ -276,44 +299,47 @@ export const updateDataPromoAPI = (data) => (dispatch) => {
           console.log(url, "ini url");
           dispatch({ type: "DOWNLOAD_IMAGE", value: url });
 
-          database.ref("Produk/Katalog/Promo" + data.produkId).set({
-            NamaProduk: data.NamaProduk,
-            Katalog: data.Katalog,
-            Kategori: data.Kategori,
-            Deskripsi: data.Deskripsi,
-            Inkluisi: data.Inkluisi,
-            FotoProduk: data.FotoProduk,
-            Harga: data.Harga,
-            downloadURL: url,
-          });
+          database
+            .ref("Produk/Katalog/Promo/" + data.userId + "/" + data.produkId)
+            .set({
+              NamaProduk: data.NamaProduk,
+              Katalog: data.Katalog,
+              Kategori: data.Kategori,
+              Deskripsi: data.Deskripsi,
+              Inkluisi: data.Inkluisi,
+              FotoProduk: data.FotoProduk,
+              Harga: data.Harga,
+              downloadURL: url,
+            });
         })
     );
-
     return;
   } else {
     console.log(data, "ini data ketika update");
-    database.ref("Produk/Katalog/Promo" + data.produkId).set({
-      NamaProduk: data.NamaProduk,
-      Katalog: data.Katalog,
-      Kategori: data.Kategori,
-      Deskripsi: data.Deskripsi,
-      Inkluisi: data.Inkluisi,
-      FotoProduk: data.FotoProduk,
-      Harga: data.Harga,
-      // downloadURL: url
-    });
+    database
+      .ref("Produk/Katalog/Promo/" + data.userId + "/" + data.produkId)
+      .set({
+        NamaProduk: data.NamaProduk,
+        Katalog: data.Katalog,
+        Kategori: data.Kategori,
+        Deskripsi: data.Deskripsi,
+        Inkluisi: data.Inkluisi,
+        FotoProduk: data.FotoProduk,
+        Harga: data.Harga,
+        // downloadURL: url
+      });
     return;
   }
 };
 
 export const updateDataSewaAPI = (data) => (dispatch) => {
-  if (data.FotoProfil !== "") {
+  if (data.FotoProduk !== "") {
     console.log(data, "ini data ketika update");
 
     const storage = firebase.storage();
     const storageRef = storage.ref();
     const uploadTask = storageRef
-      .child("produk/katalog/Sewa/" + data.FotoProduk.name)
+      .child("produk/katalog/Sewa/" + data.userId + "/" + data.FotoProduk.name)
       .put(data.FotoProduk);
     uploadTask.on(
       firebase.storage.TaskEvent.STATE_CHANGED,
@@ -333,39 +359,47 @@ export const updateDataSewaAPI = (data) => (dispatch) => {
           console.log(url, "ini url");
           dispatch({ type: "DOWNLOAD_IMAGE", value: url });
 
-          database.ref("Produk/Katalog/Sewa" + data.produkId).set({
-            NamaProduk: data.NamaProduk,
-            Katalog: data.Katalog,
-            Kategori: data.Kategori,
-            Deskripsi: data.Deskripsi,
-            Inkluisi: data.Inkluisi,
-            FotoProduk: data.FotoProduk,
-            Harga: data.Harga,
-            downloadURL: url,
-          });
+          database
+            .ref("Produk/Katalog/Sewa/" + data.userId + "/" + data.produkId)
+            .set({
+              NamaProduk: data.NamaProduk,
+              Katalog: data.Katalog,
+              Kategori: data.Kategori,
+              Deskripsi: data.Deskripsi,
+              Inkluisi: data.Inkluisi,
+              FotoProduk: data.FotoProduk,
+              Harga: data.Harga,
+              downloadURL: url,
+            });
         })
     );
-
     return;
   } else {
     console.log(data, "ini data ketika update");
-    database.ref("Produk/Katalog/Sewa" + data.produkId).set({
-      NamaProduk: data.NamaProduk,
-      Katalog: data.Katalog,
-      Kategori: data.Kategori,
-      Deskripsi: data.Deskripsi,
-      Inkluisi: data.Inkluisi,
-      FotoProduk: data.FotoProduk,
-      Harga: data.Harga,
-      // downloadURL: url
-    });
+    database
+      .ref("Produk/Katalog/Sewa/" + data.userId + "/" + data.produkId)
+      .set({
+        NamaProduk: data.NamaProduk,
+        Katalog: data.Katalog,
+        Kategori: data.Kategori,
+        Deskripsi: data.Deskripsi,
+        Inkluisi: data.Inkluisi,
+        FotoProduk: data.FotoProduk,
+        Harga: data.Harga,
+        // downloadURL: url
+      });
     return;
   }
 };
 
 export const getDataKategoriFromAPI = (data, produkId) => (dispatch) => {
   const urlProduk = database.ref(
-    "Produk/Katalog/" + data.Kategori + "/" + produkId
+    "Produk/Katalog/Kategori/" +
+      data.Kategori +
+      "/" +
+      data.userId +
+      "/" +
+      produkId
   );
   return new Promise((resolve, reject) => {
     urlProduk.on("value", (snapshot) => {
@@ -390,8 +424,10 @@ export const getDataKategoriFromAPI = (data, produkId) => (dispatch) => {
   });
 };
 
-export const getDataPromoFromAPI = (produkId) => (dispatch) => {
-  const urlProduk = database.ref("Produk/Katalog/Promo" + produkId);
+export const getDataPromoFromAPI = (data, produkId) => (dispatch) => {
+  const urlProduk = database.ref(
+    "Produk/Katalog/Promo/" + data.userId + "/" + produkId
+  );
   return new Promise((resolve, reject) => {
     urlProduk.on("value", (snapshot) => {
       // const data = snapshot.val();
@@ -415,8 +451,10 @@ export const getDataPromoFromAPI = (produkId) => (dispatch) => {
   });
 };
 
-export const getDataSewaFromAPI = (produkId) => (dispatch) => {
-  const urlProduk = database.ref("Produk/Katalog/Sewa" + produkId);
+export const getDataSewaFromAPI = (data, produkId) => (dispatch) => {
+  const urlProduk = database.ref(
+    "Produk/Katalog/Sewa/" + data.userId + "/" + produkId
+  );
   return new Promise((resolve, reject) => {
     urlProduk.on("value", (snapshot) => {
       // const data = snapshot.val();

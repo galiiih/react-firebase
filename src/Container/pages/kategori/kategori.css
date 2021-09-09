@@ -1,3 +1,16 @@
 .kategori {
     margin: 10px;
 }
+
+.card-body {
+    background-color: #434343;
+}
+.card-title{
+    color: white;
+}
+.card-text{
+    color: white;
+}
+.btn-detil {
+    margin-left: 75%;
+}
